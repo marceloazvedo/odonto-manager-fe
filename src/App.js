@@ -6,6 +6,8 @@ import { CSpinner, useColorModes } from '@coreui/react'
 import PrivateRoutes from './utils/PrivateRoutes'
 import { AuthProvider } from './utils/AuthProvider'
 import './scss/style.scss'
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // We use those styles to show code examples, you should remove them in your application.
 import './scss/examples.scss'
@@ -60,6 +62,7 @@ const App = () => {
             </Route>
           </Routes>
         </AuthProvider>
+        <ToastContainer position="top-right" autoClose={3000} />
       </Suspense>
     </HashRouter>
   )

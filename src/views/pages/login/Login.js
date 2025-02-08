@@ -12,14 +12,15 @@ import {
   CInputGroup,
   CInputGroupText,
   CRow,
+  CAlert
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 import { useAuth } from '../../../utils/AuthProvider'
-import axios from 'axios'
+import userService from "../../../services/userService";
 
 const Login = () => {
-  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState(null)
   const navigate = useNavigate()
@@ -27,16 +28,14 @@ const Login = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault();
+    setError(null)
     try {
-      const response = await axios.post("http://localhost:8080/user/authenticate", {
-        username,
-        password,
-      });
+      await userService.authenticate({email, password})
       login()
       navigate("/home")
     } catch (error) {
       console.error(error)
-      setError("Invalid username or password")
+      setError("Usuário ou senha inválido")
     }
   };
 
@@ -51,15 +50,16 @@ const Login = () => {
                   <CForm onSubmit={handleLogin}>
                     <h1>Login</h1>
                     <p className="text-body-secondary">Sign In to your account</p>
+                    {error && <CAlert color="danger">{error}</CAlert>}
                     <CInputGroup className="mb-3">
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
                       </CInputGroupText>
                       <CFormInput
-                        placeholder="Username"
-                        autoComplete="username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)} />
+                        placeholder="Email"
+                        autoComplete="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)} />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupText>
